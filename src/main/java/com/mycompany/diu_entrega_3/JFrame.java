@@ -55,6 +55,10 @@ public class JFrame extends javax.swing.JFrame {
             }
         });
 
+        minBound.setToolTipText("Introduce un valor mínimo para los números de la matriz");
+
+        maxBound.setToolTipText("Introduce un valor máximo para los números de la matriz");
+
         minBoundLabel.setText("Valor mínimo:");
 
         maxBoundLabel.setText("Valor máximo:");
@@ -181,14 +185,7 @@ public class JFrame extends javax.swing.JFrame {
        }
        matrixPanel.setVisible(true);
        sliderPanel.setVisible(true);
-       int[][] matrix = new int[10][10];
-       for(int i = 0; i < 10; i++){
-           for(int j = 0; j < 10; j++){
-               matrix[i][j] =(int) (Math.random() * Integer.parseInt(maxBound.getText())) + Integer.getInteger(minBound.getText());
-           }
-       }
-        System.out.println(matrix.toString());
-       //matrixTextArea.setText(matrix.toString());
+       //createMatrix();
     }//GEN-LAST:event_confirmButtonActionPerformed
 
 
@@ -206,5 +203,16 @@ public class JFrame extends javax.swing.JFrame {
     private javax.swing.JLabel title1Label;
     private javax.swing.JLabel title2Label;
     // End of variables declaration//GEN-END:variables
+
+    private void createMatrix() {
+        int[][] matrix = new int[10][10];
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[i].length; j++){
+                matrix[i][j] =(int) (Math.random() * Integer.parseInt(maxBound.getText())) + Integer.getInteger(minBound.getText());
+            }
+        }
+        System.out.println(matrix.toString());
+        //matrixTextArea.setText(matrix.toString());
+    }
 
 }
