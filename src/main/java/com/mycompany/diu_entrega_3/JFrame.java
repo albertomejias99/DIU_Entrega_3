@@ -14,11 +14,15 @@ import java.awt.Dimension;
  */
 public class JFrame extends javax.swing.JFrame {
 
+    int[][] matrix;
+    int maxBoundInt;
+    int minBoundInt;
     /** Creates new form JFrame */
     public JFrame() {
         initComponents();
         matrixPanel.setVisible(false);
         sliderPanel.setVisible(false);
+        matrix = new int[10][10];
     }
 
     /** This method is called from within the constructor to
@@ -42,6 +46,7 @@ public class JFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         matrixTextArea = new javax.swing.JTextArea();
         sliderPanel = new javax.swing.JPanel();
+        slider = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(126, 304));
@@ -114,7 +119,7 @@ public class JFrame extends javax.swing.JFrame {
                 .addComponent(maxBound, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(confirmButton)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         matrixPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -123,6 +128,7 @@ public class JFrame extends javax.swing.JFrame {
 
         matrixTextArea.setColumns(20);
         matrixTextArea.setRows(5);
+        matrixTextArea.setTabSize(3);
         jScrollPane1.setViewportView(matrixTextArea);
 
         javax.swing.GroupLayout matrixPanelLayout = new javax.swing.GroupLayout(matrixPanel);
@@ -131,7 +137,7 @@ public class JFrame extends javax.swing.JFrame {
             matrixPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(matrixPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                 .addContainerGap())
         );
         matrixPanelLayout.setVerticalGroup(
@@ -144,15 +150,27 @@ public class JFrame extends javax.swing.JFrame {
 
         sliderPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout sliderPanelLayout = new javax.swing.GroupLayout(sliderPanel);
         sliderPanel.setLayout(sliderPanelLayout);
         sliderPanelLayout.setHorizontalGroup(
             sliderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sliderPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(slider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         sliderPanelLayout.setVerticalGroup(
             sliderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 57, Short.MAX_VALUE)
+            .addGroup(sliderPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(slider, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,13 +181,13 @@ public class JFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(setUpPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(matrixPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE))
+                .addComponent(matrixPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(matrixPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                    .addComponent(matrixPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                     .addComponent(setUpPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sliderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -179,14 +197,31 @@ public class JFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-       if(this.isResizable()){
-           this.setSize(new Dimension(491,386));
-           this.setResizable(false);
-       }
-       matrixPanel.setVisible(true);
-       sliderPanel.setVisible(true);
-       //createMatrix();
+        maxBoundInt = Integer.parseInt(maxBound.getText());
+        minBoundInt = Integer.parseInt(minBound.getText());
+        if(this.isResizable()){
+            this.setSize(new Dimension(540,370));
+            this.setResizable(false);
+        }
+        matrixPanel.setVisible(true);
+        try{
+            if(maxBoundInt > minBoundInt){
+                sliderPanel.setVisible(true);
+                initSlider();
+                createMatrix();
+            } else {
+                matrixTextArea.setText("El valor mínimo es mayor que el valor máximo.");
+            }
+        }catch(NumberFormatException e){
+            matrixTextArea.setText("Input erróneo");
+        }
+
     }//GEN-LAST:event_confirmButtonActionPerformed
+
+    private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
+        slider.setToolTipText(((Integer)slider.getValue()).toString());
+        matrixTextArea.setText(matrixToString(this.matrix, slider.getValue()));
+    }//GEN-LAST:event_sliderStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -199,20 +234,74 @@ public class JFrame extends javax.swing.JFrame {
     private javax.swing.JTextField minBound;
     private javax.swing.JLabel minBoundLabel;
     private javax.swing.JPanel setUpPanel;
+    private javax.swing.JSlider slider;
     private javax.swing.JPanel sliderPanel;
     private javax.swing.JLabel title1Label;
     private javax.swing.JLabel title2Label;
     // End of variables declaration//GEN-END:variables
 
     private void createMatrix() {
-        int[][] matrix = new int[10][10];
-        for(int i = 0; i < matrix.length; i++){
-            for(int j = 0; j < matrix[i].length; j++){
-                matrix[i][j] =(int) (Math.random() * Integer.parseInt(maxBound.getText())) + Integer.getInteger(minBound.getText());
+        int aux;        
+        for(int i = 0; i < this.matrix.length; i++){
+            for(int j = 0; j < this.matrix[i].length; j++){
+                if(Math.abs(minBoundInt) > Math.abs(maxBoundInt)){
+                    aux = (int) (Math.random() * minBoundInt + maxBoundInt);
+                    while(aux < minBoundInt){
+                        aux = (int) (Math.random() * minBoundInt + maxBoundInt);
+                    }   
+                } else {
+                    aux = (int) (Math.random() * maxBoundInt + minBoundInt);
+                    while(aux > maxBoundInt){
+                        aux = (int) (Math.random() * maxBoundInt + minBoundInt);
+                    }
+                }
+                this.matrix[i][j] = aux;
             }
         }
-        System.out.println(matrix.toString());
-        //matrixTextArea.setText(matrix.toString());
+        matrixTextArea.setText(matrixToString(this.matrix, slider.getValue()));
     }
+    
+    private String matrixToString(int[][] num, int cut){
+        String res = "";
+        for(int i = 0; i < num.length; i++){
+            for(int j = 0; j < num[i].length; j++){
+                if(num[i][j] <= cut){
+                    res += "-\t";
+                } else {
+                    res += num[i][j] + "\t";
+                }
+            }
+            res += "\n";
+        }
+        return res;
+    }
+    /**
+        private String matrixToStringToSout(int[][] num){
+        String res = "";
+        for(int i = 0; i < num.length; i++){
+            for(int j = 0; j < num[i].length; j++){
+                res += num[i][j] + "\t";
+            }
+            res += "\n";
+        }
+        return res;
+    }
+    */
 
+    private void initSlider(){
+        slider.setMinimum(minBoundInt);
+        slider.setMaximum(maxBoundInt);
+        slider.setValue((minBoundInt + maxBoundInt)/2);
+        
+        if(Math.abs(maxBoundInt) < 10 && Math.abs(minBoundInt) < 10){
+            slider.setMajorTickSpacing(1);
+        } else if(Math.abs(minBoundInt) <= Math.abs(maxBoundInt)){
+            slider.setMajorTickSpacing(Math.abs(maxBoundInt)/10);
+        } else if(Math.abs(minBoundInt) > Math.abs(maxBoundInt)){
+            slider.setMajorTickSpacing(Math.abs(minBoundInt)/10);
+        }
+        slider.setPaintTicks(true);
+        slider.setLabelTable(null);
+        slider.setPaintLabels(true);
+    }
 }
