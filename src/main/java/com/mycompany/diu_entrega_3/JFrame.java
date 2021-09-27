@@ -197,14 +197,14 @@ public class JFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-        maxBoundInt = Integer.parseInt(maxBound.getText());
-        minBoundInt = Integer.parseInt(minBound.getText());
         if(this.isResizable()){
             this.setSize(new Dimension(540,370));
             this.setResizable(false);
         }
         matrixPanel.setVisible(true);
         try{
+            maxBoundInt = Integer.parseInt(maxBound.getText());
+            minBoundInt = Integer.parseInt(minBound.getText());
             if(maxBoundInt > minBoundInt){
                 sliderPanel.setVisible(true);
                 initSlider();
