@@ -245,14 +245,14 @@ public class JFrame extends javax.swing.JFrame {
         for(int i = 0; i < this.matrix.length; i++){
             for(int j = 0; j < this.matrix[i].length; j++){
                 if(Math.abs(minBoundInt) > Math.abs(maxBoundInt)){
-                    aux = (int) (Math.random() * minBoundInt + maxBoundInt);
+                    aux = (int) (Math.random() * minBoundInt + Math.random() * maxBoundInt);
                     while(aux < minBoundInt){
-                        aux = (int) (Math.random() * minBoundInt + maxBoundInt);
+                        aux = (int) (Math.random() * minBoundInt + Math.random() * maxBoundInt);
                     }   
                 } else {
-                    aux = (int) (Math.random() * maxBoundInt + minBoundInt);
+                    aux = (int) (Math.random() * maxBoundInt + Math.random() * minBoundInt);
                     while(aux > maxBoundInt){
-                        aux = (int) (Math.random() * maxBoundInt + minBoundInt);
+                        aux = (int) (Math.random() * maxBoundInt + Math.random() * minBoundInt);
                     }
                 }
                 this.matrix[i][j] = aux;
