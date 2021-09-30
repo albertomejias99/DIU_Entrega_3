@@ -221,6 +221,7 @@ public class JFrame extends javax.swing.JFrame {
     private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
         slider.setToolTipText(((Integer)slider.getValue()).toString());
         matrixTextArea.setText(matrixToString(this.matrix, slider.getValue()));
+        //System.out.println(matrixToStringToSout(this.matrix));
     }//GEN-LAST:event_sliderStateChanged
 
 
@@ -246,14 +247,10 @@ public class JFrame extends javax.swing.JFrame {
             for(int j = 0; j < this.matrix[i].length; j++){
                 if(Math.abs(minBoundInt) > Math.abs(maxBoundInt)){
                     aux = (int) (Math.random() * minBoundInt + Math.random() * maxBoundInt);
-                    while(aux < minBoundInt){
-                        aux = (int) (Math.random() * minBoundInt + Math.random() * maxBoundInt);
-                    }   
+                    if(!(aux >= minBoundInt && aux <= maxBoundInt)) aux = checkAux(aux);
                 } else {
                     aux = (int) (Math.random() * maxBoundInt + Math.random() * minBoundInt);
-                    while(aux > maxBoundInt){
-                        aux = (int) (Math.random() * maxBoundInt + Math.random() * minBoundInt);
-                    }
+                    if(!(aux >= minBoundInt && aux <= maxBoundInt)) aux = checkAux(aux);
                 }
                 this.matrix[i][j] = aux;
             }
@@ -303,5 +300,14 @@ public class JFrame extends javax.swing.JFrame {
         slider.setPaintTicks(true);
         slider.setLabelTable(null);
         slider.setPaintLabels(true);
+    }
+    
+    private int checkAux(int aux){
+        boolean auxOutOfBounds = true;
+        while (auxOutOfBounds){
+            aux = (int) (Math.random() * maxBoundInt + Math.random() * minBoundInt);
+            if(aux >= minBoundInt && aux <= maxBoundInt) auxOutOfBounds = false;
+        }
+        return aux;
     }
 }
